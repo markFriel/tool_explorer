@@ -1,53 +1,19 @@
-[tool.pytest.ini_options]
-addopts = "-vv"
-testpaths = [
-    "tests/",
+[project]
+name = "tool-explorer"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11.7"
+dependencies = [
+    "numpy>=2.2.3",
+    "pandas>=2.2.3",
+    "polars>=1.25.2",
+    "scipy==1.15.2",
+    "tqdm>=4.67.1",
 ]
-python_files = [
-    "test_*.py",
-    "integration_test_*.py",
-    "*_test.py"]
-junit_duration_report = "call"
-faulthandler_timeout = 120
 
-[tool.isort]
-src_paths = ["src"]
-multi_line_output = 3
-include_trailing_comma = "False"
-force_grid_wrap = 0
-use_parentheses = "True"
-line_length = 120
-
-[tool.flake8]
-max-line-length = 120
-extend-ignore = "E203, E266, E501, W503, W605"
-max-complexity = 10
-select = "B, C, E, F, W, T4"
-# Darglint config
-strictness = "full"
-docstring_style = "google"
-
-[tool.mypy]
-# http://mypy.readthedocs.io/en/latest/config_file.html#config-file
-python_version = "3.8"
-check_untyped_defs = "True"
-ignore_missing_imports = "True"
-no_implicit_optional = "True"
-strict_optional = "False"
-warn_redundant_casts = "True"
-warn_return_any = "True"
-warn_unused_ignores = "True"
-disallow_untyped_calls = "True"
-disallow_untyped_defs = "True"
-plugins = "sqlmypy"
-
-[[tool.mypy.overrides]]
-# Ignore the tests
-module = [
-    "tests.*",
-    ".venv.*"
+[dependency-groups]
+dev = [
+    "plotly>=6.0.0",
+    "pytest>=8.3.5",
 ]
-ignore_errors = "True"
-
-[tool.black]
-line-length = 120
