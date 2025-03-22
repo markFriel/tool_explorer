@@ -1,0 +1,12 @@
+language: python
+python:
+  - "3.9"  # or any other Python version you require
+
+# Travis automatically checks out your repository.
+
+install:
+  - uv install
+
+script:
+  - uv test
+  - uv build

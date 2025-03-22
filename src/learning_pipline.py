@@ -6,7 +6,7 @@ from src.evaluation.evaluation_services import EvaluationTasks
 from src.features.feature_services import FeatureTasks
 from src.models.model_services import ModelTasks
 
-load_dotenv(dotenv_path="src/.env")
+load_dotenv(dotenv_path="src/.env.example")
 
 if __name__ == "__main__":
     luigi.build(DataTasks(), local_scheduler=True, workers=1)
