@@ -10,6 +10,7 @@ def main():
 
 @timer
 def second_function(x: int, y: int):
+    print("test")
     print("hello world the second")
 
 
