@@ -9,8 +9,13 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Private :: Do Not Upload",
+    "Natural Language :: English",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
 
 dependencies = [
     "numpy>=2.2.3",
@@ -26,3 +31,6 @@ dev = [
     "plotly>=6.0.0",
     "pytest>=8.3.5",
 ]
+
+[tool.setuptools.packages.find]
+exclude = ["tests", "tests.*", "CI"]
