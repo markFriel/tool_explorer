@@ -4,6 +4,14 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11.7"
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Private :: Do Not Upload",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
 dependencies = [
     "numpy>=2.2.3",
     "pandas>=2.2.3",
