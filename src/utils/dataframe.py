@@ -1,13 +1,14 @@
-from typing import List
-
 import numpy as np
 import pandas as pd
+from numpy import ndarray
 
 
-def split_df_into_even_chunks(df: pd.DataFrame, number_of_chunks: int) -> List[pd.DataFrame]:
+def split_df_into_even_chunks(
+    df: pd.DataFrame, number_of_chunks: int
+) -> list[ndarray[tuple[int, ...]]]:
     """
     Splits a Dataframe into a number of evenly sized chunks as possible, odd number of records will result in a dataframe
-    that is of different length than the rest. This is usefull for passing a dataframe into a multi-processing function
+    that is of different length than the rest. This is usefull for passing a dataframe into a multiprocessing function
 
     args:
         df: a pandas dataframe
