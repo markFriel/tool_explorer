@@ -1,26 +1,132 @@
 version: 2.1
 
-jobs:
-  build:
-    docker:
-      - image: circleci/python:3.9
+commands:
+  setup:
     steps:
       - checkout
+      - restore_cache:
+          name: Restore UV cache
+          keys:
+            - v1-uv-{{ checksum "pyproject.toml" }}-{{ checksum "uv.lock" }}
+            - v1-uv-
       - run:
-          name: Install Dependencies
+          name: Install UV
+          command: curl -LsSf https://astral.sh/uv/install.sh | sh
+      - run:
+          name: Install dependencies
+          command: uv sync
+      - save_cache:
+          name: Save UV cache
+          key: v1-uv-{{ checksum "pyproject.toml" }}-{{ checksum "uv.lock" }}
+          paths:
+            - ~/.cache/uv
+jobs:
+  lint:
+    docker:
+      - image: cimg/python:3.9
+    resource_class: medium
+    steps:
+      - setup
+      - restore_cache:
+          name: Restore pre-commit cache
+          keys:
+            - v1-pre-commit-{{ checksum ".pre-commit-config.yaml" }}
+            - v1-pre-commit-
+      - run:
+          name: Run pre-commit checks
           command: |
-            uv install
+            SKIP=pytest pre-commit run --all-files --all-hooks
+      - save_cache:
+          name: Save pre-commit cache
+          key: v1-pre-commit-{{ checksum ".pre-commit-config.yaml" }}
+          paths:
+            - ~/.cache/pre-commit
       - run:
-          name: Run Tests
+          name: Run docstring coverage check
           command: |
-            uv test
+            mkdir -p reports
+            interrogate  -v . > reports/docstring_coverage.txt || true
+      - store_artifacts:
+          path: reports/docstring_coverage.txt
+          destination: docstring_coverage.txt
+
+  build:
+    docker:
+      - image: cimg/python:3.9
+    resource_class: large
+    steps:
+      - setup
       - run:
-          name: Build Package
+          name: Build package
           command: |
             uv build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  test:
+    docker:
+      - image: cimg/python:3.9
+    resource_class: large
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Run tests
+          command: |
+            python -m pytest --cov=./ --junitxml=test-results/junit.xml
+      - store_test_results:
+          path: test-results
+
+  deploy:
+    docker:
+      - image: cimg/python:3.9
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Validate deploy.sh script
+          command: |
+            if [ ! -f ./deploy.sh ]; then
+              echo "Error: deploy.sh script not found!"
+              exit 1
+            fi
+      - run:
+          name: Deploy
+          command: ./deploy.sh
 
 workflows:
   version: 2
-  build_and_test:
+  full:
     jobs:
-      - build
+      - lint:
+          filters:
+            branches:
+              only:
+                - dev
+                - main
+      - build:
+          requires:
+            - lint
+          filters:
+            branches:
+              only:
+                - dev
+                - main
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - dev
+                - main
+      - deploy:
+          requires:
+            - test
+          context: aws-ecr
+          filters:
+            branches:
+              only:
+                - main
