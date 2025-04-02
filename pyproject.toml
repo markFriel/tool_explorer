@@ -36,4 +36,4 @@ dev = [
 default-groups = ["dev"]
 
 [tool.setuptools.packages.find]
-exclude = ["tests", "tests.*", "CI"]
+exclude = ["tests", "tests.*", "CI", "logs"]
