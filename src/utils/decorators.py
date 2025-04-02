@@ -5,8 +5,6 @@ import sys
 import time
 from threading import Lock
 
-from src.utils.logger import get_logger  # Add this import
-
 
 def timer(func):
     @functools.wraps(func)
