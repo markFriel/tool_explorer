@@ -12,19 +12,19 @@ classifiers = [
     "Natural Language :: English",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-
-[build-system]
-requires = ["setuptools>=61.0.0", "wheel"]
-build-backend = "setuptools.build_meta"
-
 dependencies = [
     "numpy>=2.2.3",
-    "pandas>=2.2.3",
     "polars>=1.25.2",
     "pydantic>=2.10.6",
     "scipy==1.15.2",
     "tqdm>=4.67.1",
 ]
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
 
 [dependency-groups]
 dev = [
