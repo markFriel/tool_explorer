@@ -5,6 +5,8 @@ import sys
 import time
 from threading import Lock
 
+from src.utils.logger import get_logger  # Add this import
+
 
 def timer(func):
     @functools.wraps(func)
@@ -79,12 +81,15 @@ def log_decorator(level=logging.DEBUG, logger=None):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            logger.log(
-                level, f"Entering {func.__name__} with args={args}, kwargs={kwargs}"
-            )
+            # Only build the log message if this level is enabled
+            if logger.isEnabledFor(level):
+                logger.log(
+                    level, f"Entering {func.__name__} with args={args}, kwargs={kwargs}"
+                )
             try:
                 result = func(*args, **kwargs)
-                logger.log(level, f"Exiting {func.__name__} with result={result}")
+                if logger.isEnabledFor(level):
+                    logger.log(level, f"Exiting {func.__name__} with result={result}")
                 return result
             except Exception as e:
                 logger.exception(f"Exception in {func.__name__}: {e}")

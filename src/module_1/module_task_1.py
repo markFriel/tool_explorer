@@ -1,4 +1,4 @@
-def example_function(arg1: str, arg2: str) -> str:
+def example_function_mod_1(arg1: str, arg2: str) -> str:
     """
     An example function
 
@@ -10,6 +10,6 @@ def example_function(arg1: str, arg2: str) -> str:
         returns a string variable
     """
 
-    hello_world = "This is an example function"
+    hello_world = "This is an example function from module one "
     print(hello_world)
     return hello_world

@@ -126,3 +126,7 @@ dmypy.json
 *.iml
 *.iws
 out/
+
+# Ignore log files
+logs/*.log
+logs/*.log.*
